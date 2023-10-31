@@ -1,5 +1,5 @@
+using Example.Web.Factories.ViewModels.Home;
 using Example.Web.Models.Database;
-using Example.Web.ViewModels.Home;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
