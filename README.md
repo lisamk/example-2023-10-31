@@ -11,7 +11,7 @@ We tried to stick quite closely to Microsoft's example applications, so the dire
 ## Steps to run
 - Checkout code
 - Run `dotnet run` from the `src/Example.Web` directory to start the app locally.
-- Run `dotnet test` from the `test/Exmaple.Web.Tests` directory to run the unit/integration tests.
+- Run `dotnet test` from the `test/Example.Web.Tests` directory to run the unit/integration tests.
 
 ## Your task
 Our app provides a simple registration form that allows a user to enter first and last name and those will be stored to the database. Nothing more ;)
