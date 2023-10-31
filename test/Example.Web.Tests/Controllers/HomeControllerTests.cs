@@ -10,13 +10,13 @@ using Xunit;
 
 namespace Example.Web.Tests.Controllers;
 
-public class HomeControllerTest : IClassFixture<WebApplicationFactory<Program>>, IDisposable
+public class HomeControllerTests : IClassFixture<WebApplicationFactory<Program>>, IDisposable
 {
     private readonly WebApplicationFactory<Program> _factory;
     private readonly IServiceScope _scope;
     private readonly Db _db;
 
-    public HomeControllerTest(WebApplicationFactory<Program> factory)
+    public HomeControllerTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory.Init();
         _scope = _factory.Services.CreateScope();
