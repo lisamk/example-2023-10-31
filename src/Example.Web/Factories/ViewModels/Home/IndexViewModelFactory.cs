@@ -19,7 +19,7 @@ public class IndexViewModelFactory
         return new IndexViewModel();
     }
 
-    public async Task<IndexViewModel> HandleRegistration(IndexViewModel viewModel)
+    public async Task<IndexViewModel> HandleRegistrationAsync(IndexViewModel viewModel)
     {
         var registration = new Registration
         {

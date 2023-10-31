@@ -19,6 +19,6 @@ public class HomeController : Controller
         {
             return View(viewModel);
         }
-        return View(await factory.HandleRegistration(viewModel));
+        return View(await factory.HandleRegistrationAsync(viewModel));
     }
 }
