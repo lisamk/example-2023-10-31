@@ -1,8 +1,6 @@
 using System.Net;
-using System.Net.Http.Json;
-using Example.Web.Controllers;
+using Adliance.Buddy.Crypto;
 using Example.Web.Models.Database;
-using Example.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +36,7 @@ public class HomeControllerTests : IClassFixture<WebApplicationFactory<Program>>
         using var httpClient = _factory.CreateClient();
         var response = await httpClient.PostAsync("/", new FormUrlEncodedContent(new KeyValuePair<string, string>[]
         {
-            new("FirstName", "Some first name"), new("LastName", "Some last name")
+            new("FirstName", "Some first name"), new("LastName", "Some last name"), new("Email", "test@email.com")
         }));
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -47,5 +45,35 @@ public class HomeControllerTests : IClassFixture<WebApplicationFactory<Program>>
         var registration = await _db.Registrations.SingleAsync();
         Assert.Equal("Some first name", registration.FirstName);
         Assert.Equal("Some last name", registration.LastName);
+        Assert.True(Crypto.VerifyHashV2("test@email.com", registration.EmailHash, registration.EmailHashSalt));
+    }
+
+    [Fact]
+    public async Task Second_Post_Will_Not_Store_Registration_In_Database()
+    {
+        // send a raw POST here for true integration test
+
+        using var httpClient = _factory.CreateClient();
+        var response = await httpClient.PostAsync("/", new FormUrlEncodedContent(new KeyValuePair<string, string>[]
+        {
+            new("FirstName", "Some first name"), new("LastName", "Some last name"), new("Email", "test@email.com")
+        }));
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        // send a raw POST here for true integration test
+
+        response = await httpClient.PostAsync("/", new FormUrlEncodedContent(new KeyValuePair<string, string>[]
+        {
+            new("FirstName", "Some not stored first name"), new("LastName", "Some not stored last name"), new("Email", "test@email.com")
+        }));
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Contains("This email address is already registered.", new StreamReader(response.Content.ReadAsStream()).ReadToEnd());
+
+        // nothing in database
+        Assert.Single(await _db.Registrations.ToListAsync());
+        var registration = await _db.Registrations.SingleAsync();
+        Assert.Equal("Some first name", registration.FirstName);
+        Assert.Equal("Some last name", registration.LastName);
+        Assert.True(Crypto.VerifyHashV2("test@email.com", registration.EmailHash, registration.EmailHashSalt));
     }
 }

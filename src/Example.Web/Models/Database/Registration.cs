@@ -6,4 +6,7 @@ public class Registration
     public string FirstName { get; set; } = "";
     public string LastName { get; set; } = "";
     public DateTime CreatedUtc { get; set; }
+
+    public string EmailHash { get; set; } = "";
+    public Guid EmailHashSalt { get; set; }
 }
